@@ -1,0 +1,3872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VECTORI — Vehicle Purchase Intelligence</title>
+
+<style>
+
+:root{
+  --bg:#070b12;
+  --panel:#0d131d;
+  --panel2:#111a26;
+  --line:#233044;
+  --text:#f2f6fb;
+  --muted:#8d9bad;
+  --accent:#35a8ff;
+  --accent2:#67d6ff;
+  --good:#39d98a;
+  --warn:#ffca58;
+  --bad:#ff6678;
+  --shadow:0 20px 60px rgba(0,0,0,.35);
+  --radius:18px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 15% 0%,rgba(53,168,255,.12),transparent 30%),
+    radial-gradient(circle at 90% 15%,rgba(103,214,255,.07),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  line-height:1.5;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* =========================
+   NAVIGATION
+========================= */
+
+.nav{
+  position:sticky;
+  top:0;
+  z-index:100;
+  backdrop-filter:blur(18px);
+  background:rgba(7,11,18,.84);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.nav-inner{
+  max-width:1400px;
+  margin:auto;
+  min-height:74px;
+  padding:0 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:800;
+  letter-spacing:.12em;
+}
+
+.logo{
+  width:38px;
+  height:38px;
+  border:1px solid rgba(103,214,255,.6);
+  border-radius:11px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,#14283b,#08111b);
+  box-shadow:0 0 25px rgba(53,168,255,.15);
+}
+
+.logo span{
+  font-size:17px;
+  color:var(--accent2);
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.nav-links a{
+  padding:9px 13px;
+  border-radius:9px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.nav-links a:hover{
+  background:rgba(255,255,255,.05);
+  color:white;
+}
+
+.demo-pill{
+  padding:7px 11px;
+  border-radius:999px;
+  border:1px solid rgba(57,217,138,.25);
+  color:var(--good);
+  font-size:12px;
+  white-space:nowrap;
+}
+
+/* =========================
+   GENERAL LAYOUT (APP + AD MANAGER)
+========================= */
+
+.container{
+  max-width:1400px;
+  margin:auto;
+  padding:0 24px;
+}
+
+.master-layout{
+  max-width:1440px;
+  margin:auto;
+  padding:0 24px;
+  display:grid;
+  grid-template-columns:minmax(0, 7fr) minmax(300px, 3fr);
+  gap:40px;
+  align-items:start;
+}
+
+.master-main{
+  min-width:0;
+}
+
+.master-sidebar{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  padding-top:105px;
+  min-width:0;
+}
+
+.section{
+  padding:88px 0;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:30px;
+  margin-bottom:30px;
+}
+
+.eyebrow{
+  color:var(--accent2);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+
+h1,
+h2,
+h3,
+p{
+  margin-top:0;
+}
+
+h1{
+  font-size:clamp(42px,6vw,78px);
+  line-height:.98;
+  max-width:900px;
+  letter-spacing:-.055em;
+  margin-bottom:25px;
+}
+
+h2{
+  font-size:clamp(28px,4vw,44px);
+  letter-spacing:-.035em;
+  margin-bottom:10px;
+}
+
+h3{
+  font-size:19px;
+}
+
+.lead{
+  max-width:760px;
+  color:#b7c2d0;
+  font-size:18px;
+}
+
+.muted{
+  color:var(--muted);
+}
+
+.small{
+  font-size:12px;
+}
+
+.hero{
+  padding:105px 0 85px;
+}
+
+.hero-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.5fr) minmax(300px,.7fr);
+  gap:40px;
+  align-items:end;
+}
+
+.hero-card{
+  background:linear-gradient(145deg,rgba(18,29,43,.95),rgba(9,15,24,.95));
+  border:1px solid var(--line);
+  border-radius:26px;
+  padding:28px;
+  box-shadow:var(--shadow);
+}
+
+.hero-card-title{
+  color:var(--muted);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.15em;
+  margin-bottom:20px;
+}
+
+.hero-metrics{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.metric{
+  padding:16px;
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:14px;
+}
+
+.metric strong{
+  display:block;
+  font-size:25px;
+  margin-bottom:3px;
+}
+
+.metric span{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.cta-row{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:30px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn{
+  border:0;
+  border-radius:11px;
+  padding:12px 17px;
+  font-weight:700;
+  transition:.18s ease;
+}
+
+.btn-primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#03101b;
+}
+
+.btn-primary:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.06);
+}
+
+.btn-secondary{
+  color:#d9e4ef;
+  background:#121b28;
+  border:1px solid var(--line);
+}
+
+.btn-secondary:hover{
+  background:#172334;
+}
+
+.btn-danger{
+  background:rgba(255,102,120,.1);
+  color:var(--bad);
+  border:1px solid rgba(255,102,120,.2);
+}
+
+/* =========================
+   FILTERS
+========================= */
+
+.filter-panel{
+  padding:20px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  margin-bottom:22px;
+}
+
+.filter-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.field label{
+  color:#8fa0b3;
+  font-size:11px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  border:1px solid #26364a;
+  background:#0a111a;
+  color:white;
+  border-radius:10px;
+  padding:11px 12px;
+  outline:none;
+}
+
+.field textarea{
+  min-height:110px;
+  resize:vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:rgba(53,168,255,.7);
+  box-shadow:0 0 0 3px rgba(53,168,255,.08);
+}
+
+.filter-actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-top:14px;
+  flex-wrap:wrap;
+}
+
+/* =========================
+   VEHICLE CARDS
+========================= */
+
+.results-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:15px;
+}
+
+.results-count{
+  color:var(--muted);
+  font-size:14px;
+}
+
+.vehicle-list{
+  display:grid;
+  gap:15px;
+}
+
+.vehicle-card{
+  display:grid;
+  grid-template-columns:270px minmax(0,1fr) auto;
+  gap:22px;
+  align-items:stretch;
+  background:linear-gradient(145deg,#0d151f,#0a111a);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:15px;
+  transition:.18s ease;
+}
+
+.vehicle-card:hover{
+  border-color:#34506e;
+  transform:translateY(-1px);
+}
+
+.vehicle-image{
+  min-height:190px;
+  border-radius:13px;
+  overflow:hidden;
+  background:#091019;
+  border:1px solid rgba(255,255,255,.05);
+}
+
+.vehicle-image svg{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.vehicle-info{
+  min-width:0;
+}
+
+.vehicle-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.vehicle-title{
+  font-size:22px;
+  font-weight:800;
+  letter-spacing:-.025em;
+}
+
+.vehicle-variant{
+  color:#9eacbd;
+  margin-top:2px;
+}
+
+.vehicle-meta{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:13px 0;
+}
+
+.tag{
+  padding:6px 8px;
+  border:1px solid #253449;
+  border-radius:7px;
+  color:#b6c5d6;
+  font-size:11px;
+  background:#0b131d;
+}
+
+.vehicle-description{
+  color:#9ba9ba;
+  font-size:13px;
+  margin-bottom:15px;
+}
+
+.vehicle-data{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.data-box{
+  padding:10px;
+  border-radius:10px;
+  background:rgba(255,255,255,.025);
+}
+
+.data-box span{
+  display:block;
+  color:#778799;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+.data-box strong{
+  display:block;
+  margin-top:2px;
+  font-size:14px;
+}
+
+.vehicle-side{
+  min-width:180px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:14px;
+}
+
+.price{
+  font-size:25px;
+  font-weight:850;
+}
+
+.market{
+  text-align:right;
+  font-size:12px;
+}
+
+.market.good{
+  color:var(--good);
+}
+
+.market.warn{
+  color:var(--warn);
+}
+
+.market.bad{
+  color:var(--bad);
+}
+
+.checkbox-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#aab8c8;
+  font-size:12px;
+}
+
+.checkbox-row input{
+  accent-color:var(--accent);
+}
+
+
+.btn-compare{
+  width:100%;
+  margin-top:8px;
+  border:1px solid #2b3b4e;
+  background:#101925;
+  color:#dce7f2;
+  font-weight:800;
+}
+.btn-compare:hover{
+  border-color:var(--accent);
+  transform:translateY(-1px);
+}
+.btn-compare.is-selected{
+  background:rgba(57,217,138,.12);
+  border-color:rgba(57,217,138,.55);
+  color:var(--good);
+  box-shadow:0 0 0 2px rgba(57,217,138,.08) inset;
+}
+
+/* =========================
+   COMPARE
+========================= */
+
+.empty-state{
+  padding:45px;
+  border:1px dashed #2b3b4e;
+  border-radius:18px;
+  color:var(--muted);
+  text-align:center;
+  background:rgba(255,255,255,.015);
+}
+
+.compare-wrap{
+  overflow-x:auto;
+  border:1px solid var(--line);
+  border-radius:16px;
+}
+
+.compare-table{
+  width:100%;
+  min-width:1180px;
+  border-collapse:collapse;
+}
+
+.compare-table th,
+.compare-table td{
+  padding:14px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  border-right:1px solid rgba(255,255,255,.04);
+  text-align:left;
+  vertical-align:top;
+}
+
+.compare-table th{
+  background:#101925;
+  font-size:13px;
+}
+
+.compare-table td:first-child,
+.compare-table th:first-child{
+  width:180px;
+  color:#91a1b3;
+}
+
+.compare-table tr:last-child td{
+  border-bottom:0;
+}
+
+.compare-analysis{
+  margin-top:18px;
+  padding:20px;
+  border-radius:16px;
+  border:1px solid rgba(53,168,255,.2);
+  background:rgba(53,168,255,.045);
+}
+
+.signal{
+  display:inline-flex;
+  align-items:center;
+  padding:7px 10px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+
+/* =========================
+   INTELLIGENCE
+========================= */
+
+.intelligence-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.25fr) minmax(320px,.75fr);
+  gap:20px;
+}
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:22px;
+}
+
+.calc-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+
+.calc-output{
+  display:grid;
+  gap:10px;
+  margin-top:18px;
+}
+
+.output-card{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  padding:15px;
+  background:#0a111a;
+  border:1px solid #202e40;
+  border-radius:12px;
+}
+
+.output-card span{
+  color:#8797a9;
+  font-size:13px;
+}
+
+.output-card strong{
+  font-size:18px;
+}
+
+.big-output{
+  padding:22px;
+  border:1px solid rgba(103,214,255,.25);
+  background:linear-gradient(145deg,rgba(53,168,255,.08),rgba(103,214,255,.02));
+  border-radius:15px;
+}
+
+.big-output span{
+  color:#9eb2c8;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+
+.big-output strong{
+  display:block;
+  font-size:34px;
+  margin-top:4px;
+}
+
+.warning-list{
+  margin-top:15px;
+  display:grid;
+  gap:8px;
+}
+
+.warning{
+  border-left:3px solid var(--warn);
+  padding:9px 12px;
+  background:rgba(255,202,88,.05);
+  color:#cbb98b;
+  font-size:12px;
+}
+
+/* =========================
+   DEALER PORTAL
+========================= */
+
+.dealer-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
+.dealer-kpis .metric{min-height:88px;}
+
+.portal-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(320px,.7fr);
+  gap:20px;
+}
+
+.steps{
+  display:grid;
+  gap:12px;
+  margin-top:20px;
+}
+
+.step{
+  display:grid;
+  grid-template-columns:38px 1fr;
+  gap:13px;
+  align-items:start;
+  padding:14px;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:13px;
+  background:rgba(255,255,255,.018);
+}
+
+.step-number{
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  display:grid;
+  place-items:center;
+  background:#142334;
+  color:var(--accent2);
+  font-weight:800;
+}
+
+.step strong{
+  display:block;
+  margin-bottom:3px;
+}
+
+.step p{
+  margin:0;
+  color:#8494a6;
+  font-size:12px;
+}
+
+.status-box{
+  margin-top:18px;
+  padding:14px;
+  border-radius:12px;
+  background:#09121b;
+  border:1px solid #213143;
+  font-size:12px;
+  color:#91a3b6;
+}
+
+/* =========================
+   AD STYLING (NEW)
+========================= */
+
+.ad-container {
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s ease;
+}
+
+.ad-container:hover {
+  border-color: rgba(53,168,255,.4);
+}
+
+ .ad-heading{
+  color:#7f91a5;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-weight:800;
+}
+
+.inline-ad-wrap{
+  display:flex;
+  justify-content:center;
+  margin:0 0 24px;
+}
+
+.mobile-ad-band{
+  display:none;
+}
+
+.ad-slot{
+  width:100%;
+}
+
+.ad-label {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  font-size: 9px;
+  color: rgba(255,255,255,.3);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.master-bottom-ad {
+  display: flex;
+  justify-content: center;
+  margin: 40px auto;
+  border-top: 1px solid rgba(255,255,255,.05);
+  padding-top: 40px;
+}
+
+.decision-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
+.ad-creative,.ad-wide,.ad-mobile{width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:20px;text-align:left;background:radial-gradient(circle at 100% 0%,rgba(53,168,255,.14),transparent 55%),#0d131d;}
+.ad-creative b,.ad-wide b,.ad-mobile b{font-size:20px;color:#fff;}
+.ad-creative span,.ad-wide span{font-size:12px;color:#9eacbd;}
+.ad-tall{text-align:center;align-items:center;}
+.ad-wide{flex-direction:row;align-items:center;justify-content:space-between;padding:0 24px;}
+.ad-mobile{flex-direction:row;align-items:center;justify-content:space-between;padding:0 12px;gap:8px;}
+.ad-mobile b{font-size:12px;}
+.ad-empty{color:var(--muted);font-size:12px;display:grid;place-items:center;height:100%;width:100%;}
+.ad-cta{font-size:11px!important;padding:8px 11px!important;white-space:nowrap;}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+  padding:40px 0;
+  color:#748396;
+  font-size:12px;
+}
+
+.footer-grid{
+  display:flex;
+  justify-content:space-between;
+  gap:30px;
+  flex-wrap:wrap;
+}
+
+.footer-note{
+  max-width:800px;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:300;
+  display:none;
+  place-items:center;
+  padding:20px;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(7px);
+}
+
+.modal.open{
+  display:grid;
+}
+
+.modal-card{
+  width:min(800px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#0d151f;
+  border:1px solid #2a3b50;
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  padding:25px;
+}
+
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.close{
+  border:0;
+  background:#152131;
+  color:#aebdcd;
+  width:36px;
+  height:36px;
+  border-radius:9px;
+  font-size:18px;
+}
+
+.modal-card h3{
+  margin-top:24px;
+}
+
+.modal-card p,
+.modal-card li{
+  color:#9aa9ba;
+  font-size:13px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1100px){
+  .master-layout{
+    grid-template-columns:1fr;
+  }
+  
+  .master-sidebar{
+    padding-top:0;
+    flex-direction:row;
+    justify-content:center;
+    flex-wrap:wrap;
+    border-bottom:1px solid rgba(255,255,255,.05);
+    padding-bottom:40px;
+  }
+
+  .hero-grid,
+  .intelligence-grid,
+  .portal-grid{
+    grid-template-columns:1fr;
+  }
+
+  .filter-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .vehicle-card{
+    grid-template-columns:220px minmax(0,1fr);
+  }
+
+  .vehicle-side{
+    grid-column:2;
+    flex-direction:row;
+    align-items:center;
+  }
+}
+
+@media(max-width:760px){
+  .dealer-kpis{grid-template-columns:1fr 1fr;}
+  .mobile-ad-band{
+    display:flex;
+    justify-content:center;
+    margin:0 0 22px;
+  }
+
+  .mobile-ad-band .ad-container{
+    max-width:320px !important;
+  }
+
+  .inline-ad-wrap{
+    display:none;
+  }
+
+  .master-bottom-ad{
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+  }
+
+  .nav-inner{
+    min-height:65px;
+    padding:0 14px;
+  }
+
+  .nav-links{
+    display:none;
+  }
+
+  .master-layout{
+    padding:0 15px;
+  }
+
+  .container{
+    padding:0 15px;
+  }
+
+  .section{
+    padding:60px 0;
+  }
+
+  .hero{
+    padding:70px 0 55px;
+  }
+
+  .filter-grid,
+  .calc-grid{
+    grid-template-columns:1fr;
+  }
+
+  .vehicle-card{
+    grid-template-columns:1fr;
+  }
+
+  .vehicle-image{
+    min-height:210px;
+  }
+
+  .vehicle-side{
+    grid-column:auto;
+    flex-direction:row;
+    align-items:center;
+  }
+
+  .vehicle-data{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .section-head{
+    display:block;
+  }
+
+  h1{
+    font-size:45px;
+  }
+}
+
+@media(max-width:480px){
+  .decision-grid{grid-template-columns:1fr;}
+  .vehicle-data{
+    grid-template-columns:1fr;
+  }
+
+  .vehicle-side{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .market{
+    text-align:left;
+  }
+
+  .hero-metrics{
+    grid-template-columns:1fr;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<nav class="nav">
+  <div class="nav-inner">
+
+    <a href="#find" class="brand">
+      <div class="logo"><span>VX</span></div>
+      <span>VECTORI</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="#find">01 Find</a>
+      <a href="#compare">02 Compare</a>
+      <a href="#intelligence">03 Intelligence</a>
+      <a href="#dealer">05 Dealer Portal</a>
+    </div>
+
+    <div class="demo-pill">DEMO • SA MODEL</div>
+
+  </div>
+</nav>
+
+<!-- =========================
+     MASTER LAYOUT
+========================= -->
+<div class="master-layout">
+  
+  <main class="master-main">
+
+    <!-- =========================
+         HERO
+    ========================= -->
+
+    <header class="hero">
+
+      <div class="hero-grid">
+
+        <div>
+
+          <div class="eyebrow">Vehicle Purchase Intelligence</div>
+
+          <h1>
+            Find the better vehicle,
+            <span style="color:var(--accent2)">not just the cheaper one.</span>
+          </h1>
+
+          <p class="lead">
+            VECTORI brings authorised dealer inventory, market evidence,
+            ownership cost, affordability and purchase intelligence into
+            one decision workspace.
+          </p>
+
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#find">
+              Explore vehicles
+            </a>
+
+            <a class="btn btn-secondary" href="#dealer">
+              Dealer portal
+            </a>
+
+            <button class="btn btn-secondary" onclick="openModal('legalModal')">
+              Data & legal architecture
+            </button>
+          </div>
+
+        </div>
+
+        <div class="hero-card">
+
+          <div class="hero-card-title">
+            VECTORI decision workspace
+          </div>
+
+          <div class="hero-metrics">
+
+            <div class="metric">
+              <strong>4</strong>
+              <span>vehicles compared</span>
+            </div>
+
+            <div class="metric">
+              <strong>360°</strong>
+              <span>purchase view</span>
+            </div>
+
+            <div class="metric">
+              <strong>SA</strong>
+              <span>market focused</span>
+            </div>
+
+            <div class="metric">
+              <strong>LIVE*</strong>
+              <span>authorised inventory architecture</span>
+            </div>
+
+          </div>
+
+          <p class="small muted" style="margin:15px 0 0">
+            *Live inventory requires an approved dealer or licensed data feed.
+          </p>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- =========================
+         SECTION 01 — FIND
+    ========================= -->
+
+    <div class="mobile-ad-band" aria-label="Advertisement">
+      <div class="ad-slot" data-format="Mobile Banner"></div>
+    </div>
+
+    <section class="section" id="find">
+
+      <div class="section-head">
+
+        <div>
+          <div class="eyebrow">01 — Find</div>
+          <h2>Search the right vehicle.</h2>
+          <p class="muted">
+            Search participating dealer inventory using practical buying criteria.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="filter-panel">
+
+        <div class="filter-grid">
+
+          <div class="field">
+            <label>Make</label>
+            <select id="filterMake">
+              <option value="">All makes</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Model</label>
+            <select id="filterModel">
+              <option value="">All models</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Variant / Search</label>
+            <input
+              id="filterSearch"
+              type="text"
+              placeholder="e.g. 1.4, GL+, SX"
+            >
+          </div>
+
+          <div class="field">
+            <label>Dealer</label>
+            <select id="filterDealer">
+              <option value="">All dealers</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Province</label>
+            <select id="filterProvince">
+              <option value="">All provinces</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Maximum price</label>
+            <input
+              id="filterMaxPrice"
+              type="number"
+              min="0"
+              placeholder="R"
+            >
+          </div>
+
+          <div class="field">
+            <label>Maximum mileage</label>
+            <input
+              id="filterMaxMileage"
+              type="number"
+              min="0"
+              placeholder="km"
+            >
+          </div>
+
+          <div class="field">
+            <label>Sort</label>
+            <select id="filterSort">
+              <option value="best">Best decision signal</option>
+              <option value="deal">Market position</option>
+              <option value="price">Lowest price</option>
+              <option value="year">Newest year</option>
+              <option value="burden">Lowest modelled burden</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="filter-actions">
+
+          <button class="btn btn-primary" onclick="applyFilters()">
+            Search inventory
+          </button>
+
+          <button class="btn btn-secondary" onclick="resetFilters()">
+            Reset
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="results-header">
+        <div class="results-count" id="resultsCount">
+          Loading vehicles...
+        </div>
+
+        <div class="small muted">
+          Demo inventory — not live stock
+        </div>
+      </div>
+
+      <div id="vehicleResults" class="vehicle-list"></div>
+
+    </section>
+
+
+    <!-- =========================
+         SECTION 02 — COMPARE
+    ========================= -->
+
+    <section class="section" id="compare">
+
+      <div class="section-head">
+
+        <div>
+          <div class="eyebrow">02 — Compare</div>
+          <h2>Put the vehicles side by side.</h2>
+          <p class="muted">
+            Select up to six vehicles to compare the evidence that matters.
+          </p>
+        </div>
+
+        <button class="btn btn-secondary" onclick="clearComparison()">
+          Clear comparison
+        </button>
+
+      </div>
+
+      <div id="compareArea">
+
+        <div class="empty-state">
+          Select vehicles from the Find section to begin a comparison.
+        </div>
+
+      </div>
+
+    </section>
+
+
+     <div class="inline-ad-wrap">
+      <div class="ad-slot" data-format="Large Rectangle"></div>
+    </div>
+
+    <!-- =========================
+         SECTION 03 — INTELLIGENCE
+    ========================= -->
+
+    <section class="section" id="intelligence">
+
+      <div class="section-head">
+
+        <div>
+          <div class="eyebrow">03 — Intelligence</div>
+          <h2>Understand the purchase.</h2>
+          <p class="muted">
+            Move beyond asking price into market position, ownership burden,
+            affordability and stress testing.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="intelligence-grid">
+
+        <!-- CALCULATOR -->
+
+        <div class="panel">
+
+          <h3>True ownership cost</h3>
+
+          <p class="small muted">
+            Finance and ownership figures are modelled estimates, not lender,
+            insurer or service-provider quotations.
+          </p>
+
+
+          <div class="calc-grid">
+
+            <div class="field">
+              <label>Vehicle</label>
+              <select id="calcVehicle" onchange="loadCalculatorVehicle()">
+                <option value="">Select vehicle</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Asking price</label>
+              <input id="calcPrice" type="number">
+            </div>
+
+            <div class="field">
+              <label>Market benchmark</label>
+              <input id="calcMarket" type="number">
+            </div>
+
+            <div class="field">
+              <label>Consumption L/100km</label>
+              <input id="calcConsumption" type="number" step="0.1">
+            </div>
+
+            <div class="field">
+              <label>Monthly kilometres</label>
+              <input id="calcKm" type="number" value="1500">
+            </div>
+
+            <div class="field">
+              <label>Fuel price R/L</label>
+              <input id="calcFuel" type="number" step="0.01" value="26.92">
+            </div>
+
+            <div class="field">
+              <label>Deposit</label>
+              <input id="calcDeposit" type="number" value="30000">
+            </div>
+
+            <div class="field">
+              <label>Interest rate %</label>
+              <input id="calcInterest" type="number" step="0.01" value="12.5">
+            </div>
+
+            <div class="field">
+              <label>Finance term months</label>
+              <input id="calcTerm" type="number" value="72" min="1" max="120">
+            </div>
+
+            <div class="field">
+              <label>Balloon / residual %</label>
+              <input id="calcBalloonPct" type="number" step="0.1" value="0" min="0" max="60">
+            </div>
+
+            <div class="field">
+              <label>Monthly admin fee</label>
+              <input id="calcAdminFee" type="number" step="0.01" value="69" min="0">
+            </div>
+
+            <div class="field">
+              <label>Finance initiation fee</label>
+              <input id="calcInitiationFee" type="number" step="0.01" value="0" min="0">
+            </div>
+
+            <div class="field">
+              <label>Insurance / month</label>
+              <input id="calcInsurance" type="number" value="1200">
+            </div>
+
+            <div class="field">
+              <label>Maintenance R/km</label>
+              <input id="calcMaintenance" type="number" step="0.01" value="0.80">
+            </div>
+
+            <div class="field">
+              <label>Licence / year</label>
+              <input id="calcLicence" type="number" value="1800">
+            </div>
+
+            <div class="field">
+              <label>Tyre set cost</label>
+              <input id="calcTyreCost" type="number" value="5000">
+            </div>
+
+            <div class="field">
+              <label>Tyre life km</label>
+              <input id="calcTyreLife" type="number" value="50000">
+            </div>
+
+            <div class="field">
+              <label>Future value</label>
+              <input
+                id="calcFutureValue"
+                type="number"
+                placeholder="Optional"
+              >
+            </div>
+
+            <div class="field">
+              <label>Ownership horizon months</label>
+              <input id="calcHorizon" type="number" value="60">
+            </div>
+
+            <div class="field">
+              <label>Gross monthly income</label>
+              <input id="calcIncome" type="number" value="35000">
+            </div>
+
+            <div class="field">
+              <label>Other monthly debt</label>
+              <input id="calcDebt" type="number" value="3000">
+            </div>
+
+            <div class="field">
+              <label>Monthly living costs</label>
+              <input id="calcLiving" type="number" value="18000" min="0">
+            </div>
+
+            <div class="field">
+              <label>Other monthly vehicle costs</label>
+              <input id="calcOtherVehicle" type="number" value="0" min="0" step="0.01">
+            </div>
+
+            <div class="field">
+              <label>Trade-in value</label>
+              <input id="calcTradeIn" type="number" value="0" min="0">
+            </div>
+
+          </div>
+
+
+          <div class="status-box" style="margin-top:18px">
+            <strong style="color:#dce7f2">SA finance model</strong><br><br>
+            Balloon payments, initiation fees and monthly administration fees are modelled separately. A balloon reduces the instalment but remains a lump-sum obligation at term end. Actual lender pricing and fees must be confirmed by the finance provider.
+          </div>
+
+          <div class="filter-actions">
+
+            <button class="btn btn-primary" onclick="runCalculator()">
+              Analyse purchase
+            </button>
+
+            <button class="btn btn-secondary" onclick="printReport()">
+              Print report
+            </button>
+
+          </div>
+
+
+          <div id="calcOutputs" class="calc-output">
+
+            <div class="empty-state">
+              Select a vehicle and run the analysis.
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- DECISION INTELLIGENCE -->
+
+        <div class="panel">
+
+          <h3>Decision intelligence</h3>
+
+          <p class="small muted">
+            VECTORI separates observed source facts, calculated values,
+            assumptions and insufficient evidence.
+          </p>
+
+          <div id="decisionPanel">
+
+            <div class="empty-state">
+              Run an analysis to generate a decision signal.
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="section" id="checks">
+      <div class="section-head"><div><div class="eyebrow">SA Purchase Readiness</div><h2>Check the evidence before you commit.</h2><p class="muted">A South African buying workflow should treat paperwork, roadworthiness, service history, licence status and ownership transfer as first-class decision inputs.</p></div></div>
+      <div class="portal-grid">
+        <div class="panel"><h3>Buyer checklist</h3><div class="steps">
+          <div class="step"><div class="step-number">✓</div><div><strong>Vehicle identity & history</strong><p>Confirm VIN/vehicle details, service records and available history evidence.</p></div></div>
+          <div class="step"><div class="step-number">✓</div><div><strong>Roadworthy / registration evidence</strong><p>For used-vehicle transactions, verify the documentation applicable to the transfer and current roadworthiness position.</p></div></div>
+          <div class="step"><div class="step-number">✓</div><div><strong>Licence status</strong><p>Check that licence fees and registration information are current before finalising the transaction.</p></div></div>
+          <div class="step"><div class="step-number">✓</div><div><strong>Test drive & inspection</strong><p>Do not allow a strong price score to replace physical inspection and a test drive.</p></div></div>
+        </div></div>
+        <div class="panel"><h3>VECTORI evidence rule</h3><p class="muted">Every important claim should carry a provenance state:</p><div class="status-box"><strong style="color:var(--good)">OBSERVED</strong><br>Directly supplied by an authorised source.</div><div class="status-box"><strong style="color:var(--accent2)">CALCULATED</strong><br>Derived mathematically from supplied inputs.</div><div class="status-box"><strong style="color:var(--warn)">ASSUMED</strong><br>User-selected or model default that can materially change the result.</div><div class="status-box"><strong style="color:var(--bad)">MISSING</strong><br>Insufficient evidence. VECTORI should not fill the gap by guessing.</div></div>
+      </div>
+    </section>
+
+    <!-- =========================
+         SECTION 04 — DEALER PORTAL
+    ========================= -->
+
+    <section class="section" id="dealer" style="border-bottom: 0;">
+
+      <div class="section-head">
+
+        <div>
+          <div class="eyebrow">05 — Dealer Portal</div>
+          <h2>Bring your inventory into VECTORI.</h2>
+
+          <p class="muted">
+            VECTORI is designed around authorised inventory rather than
+            unauthorised marketplace scraping.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="dealer-kpis">
+        <div class="metric"><strong>Authorised</strong><span>feed-first architecture</span></div>
+        <div class="metric"><strong>Validated</strong><span>schema & data quality gates</span></div>
+        <div class="metric"><strong>Traceable</strong><span>source & freshness metadata</span></div>
+        <div class="metric"><strong>Lead-ready</strong><span>buyer enquiry workflow</span></div>
+      </div>
+
+      <div class="portal-grid">
+
+        <!-- FORM -->
+
+        <div class="panel">
+
+          <h3>Dealer uptake request</h3>
+
+          <p class="small muted">
+            Submit your dealership details to create a demo onboarding request.
+            This prototype stores the request locally in your browser only.
+          </p>
+
+
+          <form id="dealerForm" onsubmit="submitDealer(event)">
+
+            <div class="calc-grid">
+
+              <div class="field">
+                <label>Dealership name</label>
+                <input id="dealerName" required>
+              </div>
+
+              <div class="field">
+                <label>Contact person</label>
+                <input id="dealerContact" required>
+              </div>
+
+              <div class="field">
+                <label>Business email</label>
+                <input id="dealerEmail" type="email" required>
+              </div>
+
+              <div class="field">
+                <label>Business phone</label>
+                <input id="dealerPhone">
+              </div>
+
+              <div class="field">
+                <label>Province</label>
+
+                <select id="dealerProvince" required>
+                  <option value="">Select province</option>
+                  <option>Eastern Cape</option>
+                  <option>Free State</option>
+                  <option>Gauteng</option>
+                  <option>KwaZulu-Natal</option>
+                  <option>Limpopo</option>
+                  <option>Mpumalanga</option>
+                  <option>North West</option>
+                  <option>Northern Cape</option>
+                  <option>Western Cape</option>
+                </select>
+
+              </div>
+
+              <div class="field">
+                <label>Preferred feed method</label>
+
+                <select id="dealerFeed" required>
+                  <option value="">
+                    Select method
+                  </option>
+
+                  <option>
+                    Dealer API / authorised integration
+                  </option>
+
+                  <option>
+                    Dealer CSV / JSON export
+                  </option>
+
+                  <option>
+                    Dealer management system integration
+                  </option>
+
+                  <option>
+                    Discuss an alternative
+                  </option>
+                </select>
+
+              </div>
+
+            </div>
+
+
+            <div class="field" style="margin-top:12px">
+
+              <label>Notes</label>
+
+              <textarea
+                id="dealerNotes"
+                placeholder="Tell us about your inventory system, stock size or integration requirements."
+              ></textarea>
+
+            </div>
+
+
+            <div class="checkbox-row" style="margin:15px 0">
+
+              <input
+                type="checkbox"
+                id="dealerRights"
+                required
+              >
+
+              <label for="dealerRights">
+                I confirm that the dealership can authorise VECTORI to
+                access/use the selected inventory feed and that relevant
+                display, transformation, comparison and image rights can
+                be granted where applicable.
+              </label>
+
+            </div>
+
+
+            <button class="btn btn-primary" type="submit">
+              Submit uptake request
+            </button>
+
+          </form>
+
+
+          <div id="dealerStatus"></div>
+
+        </div>
+
+
+        <!-- DEALER INFORMATION -->
+
+        <div class="panel">
+
+          <h3>How onboarding works</h3>
+
+          <div class="steps">
+
+            <div class="step">
+
+              <div class="step-number">1</div>
+
+              <div>
+                <strong>Submit dealership details</strong>
+
+                <p>
+                  Tell VECTORI who you are and what inventory source
+                  you can authorise.
+                </p>
+              </div>
+
+            </div>
+
+
+            <div class="step">
+
+              <div class="step-number">2</div>
+
+              <div>
+                <strong>Select an approved feed</strong>
+
+                <p>
+                  API, authorised CSV/JSON export or another approved
+                  integration route.
+                </p>
+              </div>
+
+            </div>
+
+
+            <div class="step">
+
+              <div class="step-number">3</div>
+
+              <div>
+                <strong>Confirm data rights</strong>
+
+                <p>
+                  Confirm that VECTORI may access, display, transform,
+                  compare and analyse the supplied data where agreed.
+                </p>
+              </div>
+
+            </div>
+
+
+            <div class="step">
+
+              <div class="step-number">4</div>
+
+              <div>
+                <strong>VECTORI validates the feed</strong>
+
+                <p>
+                  Inventory is validated, normalised, timestamped and
+                  published only when the required controls are satisfied.
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="status-box">
+
+            <strong style="color:#dce8f4">
+              Production principle
+            </strong>
+
+            <br><br>
+
+            No marketplace scraping is required for the production
+            architecture. Inventory should enter VECTORI through a
+            source that the dealer or licensed provider has authorised.
+
+          </div>
+
+
+          <button
+            class="btn btn-secondary"
+            style="margin-top:14px"
+            onclick="downloadDealerBrief()"
+          >
+            Download dealer briefing
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+  
+  <!-- =========================
+       ADVERTISING SIDEBAR 
+  ========================= -->
+  <aside class="master-sidebar" aria-label="Advertising">
+    <div class="ad-heading">Sponsored partners</div>
+    <div class="ad-slot" data-format="Medium Rectangle"></div>
+    <div class="ad-slot" data-format="Half Page" style="position:sticky;top:92px;"></div>
+  </aside>
+
+</div> <!-- End Master Layout -->
+
+<!-- =========================
+     BOTTOM BANNER AD 
+========================= -->
+<div class="master-bottom-ad container">
+   <div class="ad-slot" data-format="Leaderboard"></div>
+   <div class="ad-slot bottom-wide" data-format="Wide Banner"></div>
+</div>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+  <div class="container">
+
+    <div class="footer-grid">
+
+      <div>
+        <strong style="color:#dce7f2">
+          VECTORI
+        </strong>
+
+        <div>
+          Vehicle Purchase Intelligence
+        </div>
+      </div>
+
+
+      <div class="footer-note">
+
+        <strong>Prototype disclosure:</strong>
+
+        This demonstration contains historical development examples
+        and synthetic illustrative records. It does not represent live
+        dealer inventory, lender approval, insurance quotations,
+        inspection certification or legal advice.
+
+        Production deployment requires appropriate data licences,
+        dealer authorisation, image rights, privacy controls and
+        contractual permissions.
+
+      </div>
+
+
+      <div>
+        <button
+          class="btn btn-secondary"
+          onclick="openModal('legalModal')"
+        >
+          Legal architecture
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</footer>
+
+
+<!-- =========================
+     LEGAL MODAL
+========================= -->
+
+<div class="modal" id="legalModal">
+
+  <div class="modal-card">
+
+    <div class="modal-head">
+
+      <div>
+        <div class="eyebrow">VECTORI</div>
+        <h2 style="font-size:30px">
+          Data & legal architecture
+        </h2>
+      </div>
+
+      <button
+        class="close"
+        onclick="closeModal('legalModal')"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <h3>1. Authorised data first</h3>
+
+    <p>
+      Production inventory should be obtained through an authorised
+      dealer API, licensed feed, dealer CSV/JSON export or another
+      contractual source that grants the necessary rights.
+    </p>
+
+
+    <h3>2. No automatic marketplace scraping</h3>
+
+    <p>
+      This prototype intentionally contains no automatic marketplace
+      scraper. Production integrations should be based on explicit
+      permission and contractual rights rather than assuming that
+      publicly visible information may automatically be copied,
+      stored or commercially reused.
+    </p>
+
+
+    <h3>3. POPIA</h3>
+
+    <p>
+      Personal information should be minimised. VECTORI's dealer
+      inventory architecture should primarily process business and
+      vehicle information rather than unnecessary personal data.
+      Appropriate security, purpose limitation, retention and access
+      controls should be applied in production.
+    </p>
+
+
+    <h3>4. ECTA and CPA</h3>
+
+    <p>
+      The production service should provide appropriate electronic
+      disclosures, transparent commercial information and fair
+      consumer-facing practices.
+    </p>
+
+
+    <h3>5. Finance calculations</h3>
+
+    <p>
+      Finance values shown by the prototype are mathematical estimates.
+      They are not credit approvals, lender quotations or guarantees.
+      Actual rates, fees, deposits, balloon payments, lender charges and credit
+      assessments may materially change the result. Balloon finance is modelled
+      as a residual amount due at term end; it is not free money.
+    </p>
+
+
+    <h3>6. Market evidence</h3>
+
+    <p>
+      VECTORI should distinguish between observed source data,
+      calculated metrics, assumptions and insufficient evidence.
+      A market benchmark must never be presented as fact when the
+      underlying evidence is unavailable or inadequate.
+    </p>
+
+
+    <h3>7. Image rights</h3>
+
+    <p>
+      The vehicle illustrations used in this prototype are generated
+      inline SVG demo illustrations. Production vehicle photographs
+      should only be displayed when the relevant source or dealer
+      agreement provides the required rights.
+    </p>
+
+
+    <div
+      class="status-box"
+      style="margin-top:25px"
+    >
+      Production implementation should be reviewed against the
+      applicable South African legal and contractual requirements
+      before commercial launch.
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+
+/* ============================================================
+   VECTORI DEMO DATABASE
+============================================================ */
+
+const vehicles = [
+
+  {
+    id:"VEH-001",
+    make:"Volkswagen",
+    model:"Polo Vivo",
+    variant:"1.4 Hatch",
+    year:2025,
+    mileage:18500,
+    price:234500,
+    fuel:"Petrol",
+    transmission:"Manual",
+    consumption:5.5,
+    dealer:"Demo Dealer A",
+    province:"Gauteng",
+    market:231811,
+    evidence:"Exact variant / historical supplied listing example",
+    description:
+      "Full franchise service history; 1 previous owner; 24 month / 101,500 km warranty.",
+    imageSeed:"polo"
+  },
+
+  {
+    id:"VEH-002",
+    make:"Suzuki",
+    model:"Swift",
+    variant:"1.2 GL+ Manual",
+    year:2026,
+    mileage:12500,
+    price:244850,
+    fuel:"Petrol",
+    transmission:"Manual",
+    consumption:4.4,
+    dealer:"Demo Dealer B",
+    province:"Gauteng",
+    market:231511,
+    evidence:"Exact variant / historical supplied listing example",
+    description:
+      "1 previous owner. Warranty information was not supplied in the development record.",
+    imageSeed:"swift"
+  },
+
+  {
+    id:"VEH-003",
+    make:"Toyota",
+    model:"Rumion",
+    variant:"1.5 SX Manual",
+    year:2026,
+    mileage:16520,
+    price:384500,
+    fuel:"Petrol",
+    transmission:"Manual",
+    consumption:6.2,
+    dealer:"Demo Dealer C",
+    province:"Gauteng",
+    market:372613,
+    evidence:"Exact variant / historical supplied listing example",
+    description:
+      "7 seats; 1 previous owner. Warranty information was not supplied in the development record.",
+    imageSeed:"rumion"
+  },
+
+  {
+    id:"VEH-004",
+    make:"Toyota",
+    model:"Corolla Cross",
+    variant:"1.8 Xi",
+    year:2024,
+    mileage:42000,
+    price:329900,
+    fuel:"Petrol",
+    transmission:"CVT",
+    consumption:7.3,
+    dealer:"Demo Dealer D",
+    province:"KwaZulu-Natal",
+    market:324000,
+    evidence:"Same model + year band / illustrative demo record",
+    description:
+      "Illustrative development record. Verify production inventory and vehicle history from the authorised source.",
+    imageSeed:"cross"
+  },
+
+  {
+    id:"VEH-005",
+    make:"Hyundai",
+    model:"i20",
+    variant:"1.2 Motion",
+    year:2025,
+    mileage:21000,
+    price:219900,
+    fuel:"Petrol",
+    transmission:"Manual",
+    consumption:5.7,
+    dealer:"Demo Dealer E",
+    province:"Gauteng",
+    market:225000,
+    evidence:"Same model + year band / illustrative demo record",
+    description:
+      "Illustrative development record. Verify production inventory and vehicle history from the authorised source.",
+    imageSeed:"i20"
+  },
+
+  {
+    id:"VEH-006",
+    make:"Kia",
+    model:"Sonet",
+    variant:"1.5 EX",
+    year:2025,
+    mileage:18000,
+    price:289900,
+    fuel:"Petrol",
+    transmission:"Manual",
+    consumption:6.4,
+    dealer:"Demo Dealer F",
+    province:"KwaZulu-Natal",
+    market:286000,
+    evidence:"Same model + year band / illustrative demo record",
+    description:
+      "Illustrative development record. Verify production inventory and vehicle history from the authorised source.",
+    imageSeed:"sonet"
+  }
+
+];
+
+
+/* ============================================================
+   GLOBAL STATE
+============================================================ */
+
+let filteredVehicles = [...vehicles];
+
+let comparison = [];
+
+
+/* ============================================================
+   FORMATTING
+============================================================ */
+
+function money(value){
+
+  if(value === null || value === undefined || !isFinite(value)){
+    return "Insufficient data";
+  }
+
+  return new Intl.NumberFormat("en-ZA",{
+    style:"currency",
+    currency:"ZAR",
+    maximumFractionDigits:0
+  }).format(value);
+
+}
+
+
+function number(value){
+
+  if(value === null || value === undefined || !isFinite(value)){
+    return "—";
+  }
+
+  return new Intl.NumberFormat("en-ZA").format(value);
+
+}
+
+
+function pct(value){
+
+  if(!isFinite(value)){
+    return "—";
+  }
+
+  return `${value.toFixed(1)}%`;
+
+}
+
+
+/* ============================================================
+   SVG DEMO VEHICLE IMAGE
+============================================================ */
+
+function vehicleSvg(vehicle){
+
+  const label =
+    `${vehicle.make} ${vehicle.model}`;
+
+  const seed =
+    vehicle.imageSeed || "vehicle";
+
+  const shapes = {
+
+    polo:`
+      <path d="M105 210 L145 150 L220 125 L390 125 L455 155 L520 210 Z"
+            fill="#162535"
+            stroke="#63d5ff"
+            stroke-width="3"/>
+      <path d="M220 126 L260 82 L365 82 L390 126 Z"
+            fill="#0c1824"
+            stroke="#63d5ff"
+            stroke-width="3"/>
+      <circle cx="190" cy="215" r="35"
+              fill="#080d13"
+              stroke="#91a4b8"
+              stroke-width="5"/>
+      <circle cx="450" cy="215" r="35"
+              fill="#080d13"
+              stroke="#91a4b8"
+              stroke-width="5"/>
+    `,
+
+    swift:`
+      <path d="M100 210 L145 155 L225 128 L390 132 L470 164 L525 210 Z"
+            fill="#182a35"
+            stroke="#74dcff"
+            stroke-width="3"/>
+      <path d="M230 130 L270 88 L365 88 L397 133 Z"
+            fill="#091722"
+            stroke="#74dcff"
+            stroke-width="3"/>
+      <circle cx="190" cy="215" r="34"
+              fill="#080d13"
+              stroke="#a6b6c8"
+              stroke-width="5"/>
+      <circle cx="450" cy="215" r="34"
+              fill="#080d13"
+              stroke="#a6b6c8"
+              stroke-width="5"/>
+    `,
+
+    rumion:`
+      <rect x="110" y="115" width="400" height="100" rx="20"
+            fill="#172938"
+            stroke="#6bd8ff"
+            stroke-width="3"/>
+      <rect x="180" y="75" width="250" height="70" rx="12"
+            fill="#0a1823"
+            stroke="#6bd8ff"
+            stroke-width="3"/>
+      <circle cx="190" cy="215" r="35"
+              fill="#080d13"
+              stroke="#a6b6c8"
+              stroke-width="5"/>
+      <circle cx="450" cy="215" r="35"
+              fill="#080d13"
+              stroke="#a6b6c8"
+              stroke-width="5"/>
+    `,
+
+    cross:`
+      <path d="M95 210 L130 150 L205 130 L400 130 L490 165 L530 210 Z"
+            fill="#1a2b37"
+            stroke="#73dcff"
+            stroke-width="3"/>
+      <path d="M205 130 L245 85 L375 85 L405 130 Z"
+            fill="#0a1721"
+            stroke="#73dcff"
+            stroke-width="3"/>
+      <circle cx="180" cy="215" r="35"
+              fill="#080d13"
+              stroke="#a6b6c8"
+              stroke-width="5"/>
+      <circle cx="460" cy="215" r="35"
+              fill="#080d13"
+              stroke="#a6b6c8"
+              stroke-width="5"/>
+    `,
+
+    i20:`
+      <path d="M105 210 L150 155 L230 128 L395 128 L475 165 L520 210 Z"
+            fill="#1c2936"
+            stroke="#69d7ff"
+            stroke-width="3"/>
+      <path d="M230 128 L270 88 L365 88 L398 128 Z"
+            fill="#091722"
+            stroke="#69d7ff"
+            stroke-width="3"/>
+      <circle cx="190" cy="215" r="34"
+              fill="#080d13"
+              stroke="#a6b6c8"
+              stroke-width="5"/>
+      <circle cx="445" cy="215" r="34"
+              fill="#080d13"
+              stroke="#a6b6c8"
+              stroke-width="5"/>
+    `,
+
+    sonet:`
+      <path d="M100 210 L135 155 L210 128 L405 128 L480 160 L530 210 Z"
+            fill="#172a38"
+            stroke="#73dcff"
+            stroke-width="3"/>
+      <path d="M210 128 L255 84 L375 84 L410 128 Z"
+            fill="#091722"
+            stroke="#73dcff"
+            stroke-width="3"/>
+      <circle cx="185" cy="215" r="35"
+              fill="#080d13"
+              stroke="#a6b6c8"
+              stroke-width="5"/>
+      <circle cx="455" cy="215" r="35"
+              fill="#080d13"
+              stroke="#a6b6c8"
+              stroke-width="5"/>
+    `
+
+  };
+
+  return `
+    <svg
+      viewBox="0 0 620 280"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label="${label} VECTORI demo vehicle image"
+    >
+
+      <defs>
+
+        <linearGradient
+          id="bg-${vehicle.id}"
+          x1="0"
+          y1="0"
+          x2="1"
+          y2="1"
+        >
+          <stop offset="0%" stop-color="#10202f"/>
+          <stop offset="100%" stop-color="#071018"/>
+        </linearGradient>
+
+      </defs>
+
+      <rect
+        width="620"
+        height="280"
+        fill="url(#bg-${vehicle.id})"
+      />
+
+      <ellipse
+        cx="310"
+        cy="228"
+        rx="245"
+        ry="20"
+        fill="#000"
+        opacity=".45"
+      />
+
+      ${shapes[seed] || shapes.swift}
+
+      <text
+        x="310"
+        y="35"
+        text-anchor="middle"
+        fill="#8ddfff"
+        font-size="13"
+        font-family="Arial"
+        letter-spacing="2"
+      >
+        VECTORI DEMO VEHICLE IMAGE
+      </text>
+
+      <text
+        x="310"
+        y="262"
+        text-anchor="middle"
+        fill="#71879b"
+        font-size="11"
+        font-family="Arial"
+      >
+        ${label}
+      </text>
+
+    </svg>
+  `;
+
+}
+
+
+/* ============================================================
+   MARKET POSITION
+============================================================ */
+
+function marketPosition(vehicle){
+
+  if(
+    !isFinite(vehicle.price) ||
+    !isFinite(vehicle.market) ||
+    vehicle.market <= 0
+  ){
+    return {
+      label:"Insufficient evidence",
+      className:"warn",
+      difference:null
+    };
+  }
+
+  const difference =
+    vehicle.price - vehicle.market;
+
+  const percentage =
+    (difference / vehicle.market) * 100;
+
+  if(percentage <= -5){
+
+    return {
+      label:`Below benchmark ${pct(Math.abs(percentage))}`,
+      className:"good",
+      difference
+    };
+
+  }
+
+  if(percentage <= 5){
+
+    return {
+      label:`Near benchmark ${pct(Math.abs(percentage))}`,
+      className:"warn",
+      difference
+    };
+
+  }
+
+  return {
+    label:`Above benchmark ${pct(Math.abs(percentage))}`,
+    className:"bad",
+    difference
+  };
+
+}
+
+
+/* ============================================================
+   FILTER OPTIONS
+============================================================ */
+
+function populateFilters(){
+
+  const makes =
+    [...new Set(vehicles.map(v => v.make))]
+      .sort();
+
+  const models =
+    [...new Set(vehicles.map(v => v.model))]
+      .sort();
+
+  const dealers =
+    [...new Set(vehicles.map(v => v.dealer))]
+      .sort();
+
+  const provinces =
+    [...new Set(vehicles.map(v => v.province))]
+      .sort();
+
+
+  populateSelect("filterMake",makes,"All makes");
+  populateSelect("filterModel",models,"All models");
+  populateSelect("filterDealer",dealers,"All dealers");
+  populateSelect("filterProvince",provinces,"All provinces");
+
+
+  const calc =
+    document.getElementById("calcVehicle");
+
+  calc.innerHTML =
+    `<option value="">Select vehicle</option>` +
+    vehicles.map(v =>
+      `<option value="${v.id}">
+        ${v.make} ${v.model} ${v.variant}
+      </option>`
+    ).join("");
+
+}
+
+
+function populateSelect(id,values,defaultLabel){
+
+  const select =
+    document.getElementById(id);
+
+  select.innerHTML =
+    `<option value="">${defaultLabel}</option>` +
+    values.map(v =>
+      `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`
+    ).join("");
+
+}
+
+
+/* ============================================================
+   ESCAPE
+============================================================ */
+
+function escapeHtml(value){
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+/* ============================================================
+   RENDER VEHICLES
+============================================================ */
+
+function renderVehicles(list){
+
+  const container =
+    document.getElementById("vehicleResults");
+
+  document.getElementById("resultsCount").textContent =
+    `${list.length} vehicle${list.length === 1 ? "" : "s"} found`;
+
+
+  if(!list.length){
+
+    container.innerHTML = `
+      <div class="empty-state">
+        No vehicles match the selected criteria.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  container.innerHTML =
+    list.map(vehicleCard).join("");
+
+}
+
+
+function vehicleCard(v){
+
+  const position =
+    marketPosition(v);
+
+  const selected =
+    comparison.includes(v.id);
+
+
+  return `
+
+    <article class="vehicle-card">
+
+      <div class="vehicle-image">
+        ${vehicleSvg(v)}
+      </div>
+
+
+      <div class="vehicle-info">
+
+        <div class="vehicle-top">
+
+          <div>
+
+            <div class="vehicle-title">
+              ${escapeHtml(v.make)}
+              ${escapeHtml(v.model)}
+            </div>
+
+            <div class="vehicle-variant">
+              ${escapeHtml(v.variant)}
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="vehicle-meta">
+
+          <span class="tag">${v.year}</span>
+
+          <span class="tag">
+            ${number(v.mileage)} km
+          </span>
+
+          <span class="tag">
+            ${escapeHtml(v.fuel)}
+          </span>
+
+          <span class="tag">
+            ${escapeHtml(v.transmission)}
+          </span>
+
+          <span class="tag">
+            ${v.consumption} L/100km
+          </span>
+
+        </div>
+
+
+        <div class="vehicle-description">
+          ${escapeHtml(v.description)}
+        </div>
+
+
+        <div class="vehicle-data">
+
+          <div class="data-box">
+
+            <span>Dealer</span>
+
+            <strong>
+              ${escapeHtml(v.dealer)}
+            </strong>
+
+          </div>
+
+
+          <div class="data-box">
+
+            <span>Province</span>
+
+            <strong>
+              ${escapeHtml(v.province)}
+            </strong>
+
+          </div>
+
+
+          <div class="data-box">
+
+            <span>Evidence</span>
+
+            <strong>
+              ${escapeHtml(v.evidence)}
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="vehicle-side">
+
+        <div>
+
+          <div class="price">
+            ${money(v.price)}
+          </div>
+
+          <div class="market ${position.className}">
+            ${position.label}
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <button
+            class="btn btn-compare ${selected ? "is-selected" : ""}"
+            type="button"
+            aria-pressed="${selected ? "true" : "false"}"
+            onclick="toggleComparison('${v.id}', ${selected ? "false" : "true"})"
+          >
+            ${selected ? "✓ Compared" : "＋ Add to Compare"}
+          </button>
+
+
+          <button
+            class="btn btn-secondary"
+            style="margin-top:8px;width:100%"
+            onclick="analyseVehicle('${v.id}')"
+          >
+            Analyse
+          </button>
+
+        </div>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+/* ============================================================
+   FILTERING
+============================================================ */
+
+function applyFilters(){
+
+  const make =
+    document.getElementById("filterMake").value;
+
+  const model =
+    document.getElementById("filterModel").value;
+
+  const search =
+    document.getElementById("filterSearch").value
+      .trim()
+      .toLowerCase();
+
+  const dealer =
+    document.getElementById("filterDealer").value;
+
+  const province =
+    document.getElementById("filterProvince").value;
+
+  const maxPrice =
+    parseFloat(document.getElementById("filterMaxPrice").value);
+
+  const maxMileage =
+    parseFloat(document.getElementById("filterMaxMileage").value);
+
+  const sort =
+    document.getElementById("filterSort").value;
+
+
+  filteredVehicles =
+    vehicles.filter(v => {
+
+      if(make && v.make !== make){
+        return false;
+      }
+
+      if(model && v.model !== model){
+        return false;
+      }
+
+      if(dealer && v.dealer !== dealer){
+        return false;
+      }
+
+      if(province && v.province !== province){
+        return false;
+      }
+
+      if(isFinite(maxPrice) && v.price > maxPrice){
+        return false;
+      }
+
+      if(isFinite(maxMileage) && v.mileage > maxMileage){
+        return false;
+      }
+
+
+      if(search){
+
+        const text =
+          `${v.make} ${v.model} ${v.variant} ${v.dealer}`
+            .toLowerCase();
+
+        if(!text.includes(search)){
+          return false;
+        }
+
+      }
+
+      return true;
+
+    });
+
+
+  filteredVehicles.sort((a,b) => {
+
+    if(sort === "price"){
+      return a.price - b.price;
+    }
+
+    if(sort === "km"){
+      return a.mileage - b.mileage;
+    }
+
+    if(sort === "year"){
+      return b.year - a.year;
+    }
+
+    if(sort === "deal"){
+      return (
+        ((a.price-a.market)/a.market) -
+        ((b.price-b.market)/b.market)
+      );
+    }
+
+    if(sort === "burden"){
+      return modelledBurden(a) - modelledBurden(b);
+    }
+
+    return decisionScore(b) - decisionScore(a);
+
+  });
+
+
+  renderVehicles(filteredVehicles);
+
+}
+
+
+function resetFilters(){
+
+  document.getElementById("filterMake").value = "";
+  document.getElementById("filterModel").value = "";
+  document.getElementById("filterSearch").value = "";
+  document.getElementById("filterDealer").value = "";
+  document.getElementById("filterProvince").value = "";
+  document.getElementById("filterMaxPrice").value = "";
+  document.getElementById("filterMaxMileage").value = "";
+  document.getElementById("filterSort").value = "best";
+
+  filteredVehicles = [...vehicles];
+
+  renderVehicles(filteredVehicles);
+
+}
+
+
+/* ============================================================
+   COMPARISON
+============================================================ */
+
+function toggleComparison(id,checked){
+
+  if(checked){
+
+    if(comparison.includes(id)){
+      return;
+    }
+
+    if(comparison.length >= 6){
+
+      alert(
+        "VECTORI comparison is limited to six vehicles."
+      );
+
+      renderVehicles(filteredVehicles);
+
+      return;
+    }
+
+    comparison.push(id);
+
+  }else{
+
+    comparison =
+      comparison.filter(item => item !== id);
+
+  }
+
+  renderVehicles(filteredVehicles);
+  renderComparison();
+
+}
+
+
+function clearComparison(){
+
+  comparison = [];
+
+  renderVehicles(filteredVehicles);
+  renderComparison();
+
+}
+
+
+function renderComparison(){
+
+  const area =
+    document.getElementById("compareArea");
+
+  const selected =
+    comparison
+      .map(id => vehicles.find(v => v.id === id))
+      .filter(Boolean);
+
+
+  if(!selected.length){
+
+    area.innerHTML = `
+      <div class="empty-state">
+        Select vehicles from the Find section to begin a comparison.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  const burdenRows = selected.map(v => ({
+    vehicle: v,
+    burden: modelledBurden(v)
+  }));
+  const strongest =
+    burdenRows.reduce((best,current) =>
+      current.burden < best.burden ? current : best
+    ).vehicle;
+  const burdenRange = burdenRows.filter(x => Number.isFinite(x.burden));
+  const lowestBurden = burdenRange.length ? Math.min(...burdenRange.map(x => x.burden)) : null;
+  const highestBurden = burdenRange.length ? Math.max(...burdenRange.map(x => x.burden)) : null;
+
+
+  area.innerHTML = `
+
+    <div class="compare-wrap">
+
+      <table class="compare-table">
+
+        <thead>
+
+          <tr>
+
+            <th>Metric</th>
+
+            ${selected.map(v => `
+              <th>
+                ${escapeHtml(v.make)}
+                ${escapeHtml(v.model)}
+                <br>
+                <span class="muted">
+                  ${escapeHtml(v.variant)}
+                </span>
+              </th>
+            `).join("")}
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          ${compareRow(
+            "Asking price",
+            selected,
+            v => money(v.price)
+          )}
+
+          ${compareRow(
+            "Year",
+            selected,
+            v => v.year
+          )}
+
+          ${compareRow(
+            "Mileage",
+            selected,
+            v => `${number(v.mileage)} km`
+          )}
+
+          ${compareRow(
+            "Market benchmark",
+            selected,
+            v => money(v.market)
+          )}
+
+          ${compareRow(
+            "Market position",
+            selected,
+            v => marketPosition(v).label
+          )}
+
+          ${compareRow(
+            "Consumption",
+            selected,
+            v => `${v.consumption} L/100km`
+          )}
+
+          ${compareRow(
+            "Transmission",
+            selected,
+            v => v.transmission
+          )}
+
+          ${compareRow(
+            "Dealer",
+            selected,
+            v => v.dealer
+          )}
+
+          ${compareRow(
+            "Evidence",
+            selected,
+            v => v.evidence
+          )}
+
+          ${compareRow(
+            "Modelled monthly burden",
+            selected,
+            v => money(modelledBurden(v))
+          )}
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+    <div class="compare-analysis">
+
+      <div
+        class="signal"
+        style="
+          background:rgba(57,217,138,.1);
+          color:var(--good);
+          border:1px solid rgba(57,217,138,.2);
+        "
+      >
+        STRONGEST MODELLED BURDEN
+      </div>
+
+      <h3>
+        ${escapeHtml(strongest.make)}
+        ${escapeHtml(strongest.model)}
+        ${escapeHtml(strongest.variant)}
+      </h3>
+
+      <p class="muted">
+
+        Based on the current demonstration assumptions,
+        this vehicle has the lowest modelled monthly cash ownership
+        burden among the selected vehicles.
+        ${lowestBurden !== null && highestBurden !== null ? `The selected range is ${money(lowestBurden)} to ${money(highestBurden)} per month.` : ""}
+
+        This is not a final recommendation because vehicle
+        condition, history, warranty, financing terms and
+        other evidence may materially affect the decision.
+
+      </p>
+
+    </div>
+
+  `;
+
+}
+
+
+function compareRow(label,list,fn){
+
+  return `
+
+    <tr>
+
+      <td>
+        <strong>${escapeHtml(label)}</strong>
+      </td>
+
+      ${list.map(v => `
+        <td>${escapeHtml(String(fn(v)))}</td>
+      `).join("")}
+
+    </tr>
+
+  `;
+
+}
+
+
+/* ============================================================
+   CALCULATOR
+============================================================ */
+
+function loadCalculatorVehicle(){
+
+  const id =
+    document.getElementById("calcVehicle").value;
+
+  const vehicle =
+    vehicles.find(v => v.id === id);
+
+  if(!vehicle){
+    return;
+  }
+
+
+  document.getElementById("calcPrice").value =
+    vehicle.price;
+
+  document.getElementById("calcMarket").value =
+    vehicle.market;
+
+  document.getElementById("calcConsumption").value =
+    vehicle.consumption;
+
+}
+
+
+function getNum(id){
+
+  const value =
+    parseFloat(document.getElementById(id).value);
+
+  return isFinite(value) ? value : null;
+
+}
+
+
+function pmt(rate,nper,pv,futureValue=0){
+  if(!Number.isFinite(rate) || !Number.isFinite(nper) || nper<=0 || !Number.isFinite(pv) || pv<0){
+    return NaN;
+  }
+  if(rate===0){
+    return (pv-Math.max(0,futureValue))/nper;
+  }
+  const fv=Math.max(0,futureValue||0);
+  const discount=Math.pow(1+rate,-nper);
+  const payment=(pv-fv*discount)*rate/(1-discount);
+  return payment;
+}
+
+function getInputNum(id, fallback=null){
+  const el=document.getElementById(id);
+  if(!el) return fallback;
+  const value=parseFloat(el.value);
+  return Number.isFinite(value) ? value : fallback;
+}
+
+function calculate(vehicle){
+  const price=getInputNum("calcPrice");
+  const market=getInputNum("calcMarket");
+  const consumption=getInputNum("calcConsumption");
+  const monthlyKm=getInputNum("calcKm");
+  const fuelPrice=getInputNum("calcFuel");
+  const deposit=getInputNum("calcDeposit");
+  const annualInterest=getInputNum("calcInterest");
+  const term=getInputNum("calcTerm");
+  const balloonPct=getInputNum("calcBalloonPct",0);
+  const adminFee=getInputNum("calcAdminFee",0);
+  const initiationFee=getInputNum("calcInitiationFee",0);
+  const insurance=getInputNum("calcInsurance",0);
+  const maintenanceRate=getInputNum("calcMaintenance",0);
+  const licence=getInputNum("calcLicence",0);
+  const tyreCost=getInputNum("calcTyreCost",0);
+  const tyreLife=getInputNum("calcTyreLife",0);
+  const futureValue=getInputNum("calcFutureValue",null);
+  const horizon=getInputNum("calcHorizon");
+  const income=getInputNum("calcIncome");
+  const debt=getInputNum("calcDebt",0);
+  const living=getInputNum("calcLiving",0);
+  const otherVehicle=getInputNum("calcOtherVehicle",0);
+  const tradeIn=getInputNum("calcTradeIn",0);
+  const errors=[];
+
+  if(!Number.isFinite(price)||price<=0) errors.push("A valid asking price is required.");
+  if(!Number.isFinite(consumption)||consumption<=0) errors.push("A valid fuel consumption value is required.");
+  if(!Number.isFinite(monthlyKm)||monthlyKm<0) errors.push("Monthly kilometres must be zero or greater.");
+  if(!Number.isFinite(fuelPrice)||fuelPrice<0) errors.push("Fuel price cannot be negative.");
+  if(!Number.isFinite(deposit)||deposit<0) errors.push("Deposit cannot be negative.");
+  if(!Number.isFinite(tradeIn)||tradeIn<0) errors.push("Trade-in value cannot be negative.");
+  if(!Number.isFinite(annualInterest)||annualInterest<0) errors.push("Interest rate cannot be negative.");
+  if(!Number.isFinite(term)||term<=0||term>120) errors.push("Finance term must be between 1 and 120 months.");
+  if(!Number.isFinite(balloonPct)||balloonPct<0||balloonPct>60) errors.push("Balloon percentage must be between 0% and 60%.");
+  if(!Number.isFinite(adminFee)||adminFee<0) errors.push("Monthly admin fee cannot be negative.");
+  if(!Number.isFinite(initiationFee)||initiationFee<0) errors.push("Initiation fee cannot be negative.");
+  if(!Number.isFinite(insurance)||insurance<0) errors.push("Insurance cannot be negative.");
+  if(!Number.isFinite(maintenanceRate)||maintenanceRate<0) errors.push("Maintenance rate cannot be negative.");
+  if(!Number.isFinite(licence)||licence<0) errors.push("Licence reserve cannot be negative.");
+  if(!Number.isFinite(tyreCost)||tyreCost<0) errors.push("Tyre cost cannot be negative.");
+  if(!Number.isFinite(tyreLife)||tyreLife<0) errors.push("Tyre life cannot be negative.");
+  if(!Number.isFinite(income)||income<=0) errors.push("Gross monthly income is required for affordability.");
+  if(deposit+tradeIn>=price && Number.isFinite(price)) errors.push("Deposit plus trade-in must be lower than the asking price.");
+  if(errors.length) return {errors};
+
+  const netPurchasePrice=Math.max(0,price-tradeIn);
+  const principal=Math.max(0,netPurchasePrice-deposit);
+  const balloonAmount=principal*(balloonPct/100);
+  const monthlyRate=annualInterest/100/12;
+  const financePayment=principal===0?0:pmt(monthlyRate,term,principal,balloonAmount);
+  const fuelMonthly=consumption*monthlyKm/100*fuelPrice;
+  const maintenanceMonthly=maintenanceRate*monthlyKm;
+  const tyresMonthly=tyreLife>0?monthlyKm/tyreLife*tyreCost:0;
+  const licenceMonthly=licence/12;
+  const horizonMonths=Number.isFinite(horizon)&&horizon>0?horizon:term;
+  let depreciationMonthly=0;
+  if(futureValue!==null && futureValue>=0 && horizonMonths>0){
+    depreciationMonthly=Math.max(0,netPurchasePrice-futureValue)/horizonMonths;
+  }
+  const financeCashMonthly=financePayment+adminFee;
+  const operatingMonthly=fuelMonthly+insurance+maintenanceMonthly+licenceMonthly+tyresMonthly+otherVehicle;
+  const totalCashMonthly=financeCashMonthly+operatingMonthly;
+  const totalEconomicMonthly=totalCashMonthly+depreciationMonthly-(principal>0?principal/Math.max(term,1):0);
+  const totalFinanceRepayment=financePayment*term+balloonAmount+initiationFee+adminFee*term;
+  const estimatedInterest=Math.max(0,totalFinanceRepayment-principal);
+  const cashRemaining=income-debt-living-totalCashMonthly;
+  const vehicleRatio=totalCashMonthly/income*100;
+  const debtServiceRatio=(debt+financePayment+adminFee)/income*100;
+  const balloonReserve=balloonAmount/Math.max(term,1);
+  const stressRate=(annualInterest+1)/100/12;
+  const stressFinance=principal===0?0:pmt(stressRate,term,principal,balloonAmount);
+  const stressTotal=(stressFinance+adminFee)+(fuelMonthly*1.20)+(insurance*1.15)+(maintenanceMonthly*1.20)+licenceMonthly+tyresMonthly+otherVehicle;
+  const marketDelta=Number.isFinite(market)&&market>0?price-market:null;
+  const marketPct=marketDelta!==null?marketDelta/market*100:null;
+
+  return {errors:[],price,market,principal,netPurchasePrice,balloonAmount,balloonPct,financePayment,totalFinanceRepayment,estimatedInterest,adminFee,initiationFee,fuelMonthly,insurance,maintenanceMonthly,licenceMonthly,tyresMonthly,otherVehicle,depreciationMonthly,totalCashMonthly,totalEconomicMonthly,vehicleRatio,debtServiceRatio,cashRemaining,stressTotal,balloonReserve,marketDelta,marketPct,vehicle};
+}
+
+
+/* ============================================================
+   CALCULATOR OUTPUT
+============================================================ */
+
+function runCalculator(){
+  const id=document.getElementById("calcVehicle").value;
+  const vehicle=vehicles.find(v=>v.id===id);
+  const result=calculate(vehicle);
+  const output=document.getElementById("calcOutputs");
+  const decision=document.getElementById("decisionPanel");
+
+  if(result.errors.length){
+    output.innerHTML=`<div class="warning-list">${result.errors.map(error=>`<div class="warning">${escapeHtml(error)}</div>`).join("")}</div>`;
+    decision.innerHTML=`<div class="empty-state">Correct the highlighted assumptions before running the purchase analysis.</div>`;
+    return;
+  }
+
+  output.innerHTML=`
+    <div class="big-output"><span>Monthly cash ownership burden</span><strong>${money(result.totalCashMonthly)}</strong></div>
+    <div class="output-card"><span>Finance instalment</span><strong>${money(result.financePayment)}</strong></div>
+    <div class="output-card"><span>Monthly finance admin</span><strong>${money(result.adminFee)}</strong></div>
+    <div class="output-card"><span>Balloon at term end</span><strong>${money(result.balloonAmount)}</strong></div>
+    <div class="output-card"><span>Fuel</span><strong>${money(result.fuelMonthly)}</strong></div>
+    <div class="output-card"><span>Insurance</span><strong>${money(result.insurance)}</strong></div>
+    <div class="output-card"><span>Maintenance</span><strong>${money(result.maintenanceMonthly)}</strong></div>
+    <div class="output-card"><span>Tyres</span><strong>${money(result.tyresMonthly)}</strong></div>
+    <div class="output-card"><span>Licence reserve</span><strong>${money(result.licenceMonthly)}</strong></div>
+    <div class="output-card"><span>Depreciation reserve</span><strong>${money(result.depreciationMonthly)}</strong></div>
+    <div class="output-card"><span>Estimated finance interest + fees</span><strong>${money(result.estimatedInterest)}</strong></div>
+    <div class="output-card"><span>Vehicle cash burden / gross income</span><strong>${pct(result.vehicleRatio)}</strong></div>
+    <div class="output-card"><span>Debt service / gross income</span><strong>${pct(result.debtServiceRatio)}</strong></div>
+    <div class="output-card"><span>Estimated cash remaining</span><strong>${money(result.cashRemaining)}</strong></div>
+    <div class="output-card"><span>Balloon reserve planning amount</span><strong>${money(result.balloonReserve)}/mo</strong></div>
+    <div class="output-card"><span>Stress-tested monthly burden</span><strong>${money(result.stressTotal)}</strong></div>
+  `;
+  renderDecision(result);
+}
+
+
+/* ============================================================
+   DECISION ENGINE
+============================================================ */
+
+function renderDecision(result){
+  const panel=document.getElementById("decisionPanel");
+  const position=result.vehicle?marketPosition(result.vehicle):null;
+  const warnings=[];
+  const positives=[];
+  if(position && position.className==="bad") warnings.push("Asking price is above the supplied market benchmark.");
+  if(result.vehicleRatio>30) warnings.push("Vehicle cash burden exceeds 30% of gross monthly income. This is a screening signal, not a lender rule.");
+  if(result.cashRemaining<0) warnings.push("The modelled purchase leaves negative monthly cash after stated debt, living costs and vehicle costs.");
+  if(result.balloonAmount>0) warnings.push(`A ${pct(result.balloonPct)} balloon remains due at term end. Plan for ${money(result.balloonAmount)} or an appropriate settlement strategy.`);
+  if(result.debtServiceRatio>40) warnings.push("Modelled debt service is above 40% of gross income; actual lender affordability criteria differ.");
+  if(result.vehicle && String(result.vehicle.evidence||"").toLowerCase().includes("illustrative")) warnings.push("This vehicle is an illustrative development record and must not be treated as live inventory.");
+  if(position && position.className==="good") positives.push("Asking price is below the supplied market benchmark.");
+  if(result.cashRemaining>=0) positives.push("Modelled monthly cash flow remains positive after stated expenses.");
+  if(result.balloonAmount===0) positives.push("No balloon payment is included in this scenario.");
+
+  let signal="REVIEW", signalClass="background:rgba(255,202,88,.1);color:var(--warn);border:1px solid rgba(255,202,88,.2);";
+  if(result.cashRemaining<0 || result.vehicleRatio>40) { signal="HIGHER RISK"; signalClass="background:rgba(255,102,120,.1);color:var(--bad);border:1px solid rgba(255,102,120,.2);"; }
+  else if(result.vehicleRatio<=25 && result.cashRemaining>=0 && position && position.className==="good") { signal="STRONGER CANDIDATE"; signalClass="background:rgba(57,217,138,.1);color:var(--good);border:1px solid rgba(57,217,138,.2);"; }
+
+  panel.innerHTML=`
+    <div class="signal" style="${signalClass}">${signal}</div>
+    <h3>${escapeHtml(result.vehicle.make)} ${escapeHtml(result.vehicle.model)}</h3>
+    <p class="muted">Asking price: <strong style="color:white">${money(result.price)}</strong><br>Supplied market benchmark: <strong style="color:white">${money(result.market)}</strong><br>Monthly cash burden: <strong style="color:white">${money(result.totalCashMonthly)}</strong><br>Stress burden: <strong style="color:white">${money(result.stressTotal)}</strong></p>
+    <div class="decision-grid">
+      <div class="status-box"><strong>What supports the case</strong><br><br>${positives.length?positives.map(x=>`✓ ${escapeHtml(x)}`).join('<br>'):'No positive signal established.'}</div>
+      <div class="status-box"><strong>What needs attention</strong><br><br>${warnings.length?warnings.map(x=>`! ${escapeHtml(x)}`).join('<br>'):'No major warning triggered by the current assumptions.'}</div>
+    </div>
+    <div class="status-box"><strong style="color:#dce7f2">Evidence hierarchy</strong><br><br>Observed source facts → calculated metrics → explicit assumptions → missing/insufficient evidence. VECTORI should never convert missing evidence into a positive claim.</div>
+  `;
+}
+
+
+/* ============================================================
+   SIMPLE DECISION SCORE
+============================================================ */
+
+function decisionScore(v){
+  if(!v) return 0;
+  let score=50;
+  if(Number.isFinite(v.market)&&v.market>0) score-=((v.price-v.market)/v.market)*100;
+  if(v.mileage<=20000) score+=10; else if(v.mileage<=50000) score+=4; else score-=5;
+  if(v.consumption<=5) score+=8; else if(v.consumption<=6.5) score+=3; else score-=4;
+  if(String(v.evidence||"").toLowerCase().includes("illustrative")) score-=8;
+  if(v.province) score+=2;
+  return score;
+}
+
+
+/* ============================================================
+   MODELLED BURDEN FOR SORTING / COMPARISON
+============================================================ */
+
+function modelledBurden(v){
+  if(!v || !Number.isFinite(v.price) || v.price<=0 || !Number.isFinite(v.consumption) || v.consumption<=0) return Infinity;
+  const deposit=30000;
+  const principal=Math.max(0,v.price-deposit);
+  const annualRate=0.125;
+  const termMonths=72;
+  const monthlyRate=annualRate/12;
+  const finance=pmt(monthlyRate,termMonths,principal,0);
+  const fuel=v.consumption*1500/100*26.92;
+  const maintenance=0.80*1500;
+  const tyres=1500/50000*5000;
+  const licence=1800/12;
+  const admin=69;
+  const insurance=1200;
+  return finance+admin+fuel+insurance+maintenance+tyres+licence;
+}
+
+
+/* ============================================================
+   ANALYSE SPECIFIC VEHICLE
+============================================================ */
+
+function analyseVehicle(id){
+
+  const vehicle =
+    vehicles.find(v => v.id === id);
+
+  if(!vehicle){
+    return;
+  }
+
+
+  document.getElementById("calcVehicle").value =
+    vehicle.id;
+
+  loadCalculatorVehicle();
+
+  document.getElementById("intelligence")
+    .scrollIntoView({
+      behavior:"smooth"
+    });
+
+
+  setTimeout(() => {
+
+    runCalculator();
+
+  },250);
+
+}
+
+
+/* ============================================================
+   PRINT REPORT
+============================================================ */
+
+function printReport(){
+
+  const outputs =
+    document.getElementById("calcOutputs").innerHTML;
+
+  const decision =
+    document.getElementById("decisionPanel").innerHTML;
+
+  const vehicleId =
+    document.getElementById("calcVehicle").value;
+
+  const vehicle =
+    vehicles.find(v => v.id === vehicleId);
+
+
+  if(!vehicle || outputs.includes("Select a vehicle")){
+
+    alert(
+      "Please select a vehicle and run the analysis first."
+    );
+
+    return;
+
+  }
+
+
+  const report =
+    `
+
+    <!DOCTYPE html>
+
+    <html>
+
+    <head>
+
+      <title>
+        VECTORI Purchase Intelligence Report
+      </title>
+
+      <style>
+
+        body{
+          font-family:Arial,sans-serif;
+          padding:40px;
+          color:#111;
+        }
+
+        h1{
+          margin-bottom:5px;
+        }
+
+        .box{
+          border:1px solid #ddd;
+          padding:15px;
+          margin:12px 0;
+          border-radius:8px;
+        }
+
+      </style>
+
+    </head>
+
+    <body>
+
+      <h1>VECTORI</h1>
+
+      <p>
+        Vehicle Purchase Intelligence Report
+      </p>
+
+      <hr>
+
+      <h2>
+        ${escapeHtml(vehicle.make)}
+        ${escapeHtml(vehicle.model)}
+        ${escapeHtml(vehicle.variant)}
+      </h2>
+
+      <p>
+        Asking price:
+        ${money(vehicle.price)}
+      </p>
+
+      <div class="box">
+        ${outputs}
+      </div>
+
+      <h2>Decision intelligence</h2>
+
+      <div class="box">
+        ${decision}
+      </div>
+
+      <p>
+        This report contains modelled estimates and is not a
+        lender approval, insurance quotation, inspection report
+        or legal opinion.
+      </p>
+
+    <div id="buildStamp" hidden>VECTORI Global-Standard SA Upgrade 1.0</div>
+</body>
+
+    </html>
+
+    `;
+
+
+  const blob =
+    new Blob(
+      [report],
+      {type:"text/html"}
+    );
+
+
+  const url =
+    URL.createObjectURL(blob);
+
+
+  const win =
+    window.open(url,"_blank");
+
+
+  if(!win){
+
+    alert(
+      "Your browser blocked the report window. Please allow pop-ups for this page."
+    );
+
+    return;
+
+  }
+
+
+  win.onload = () => {
+
+    setTimeout(() => {
+
+      win.print();
+
+    },300);
+
+  };
+
+}
+
+
+/* ============================================================
+   DEALER PORTAL
+============================================================ */
+
+function submitDealer(event){
+
+  event.preventDefault();
+
+
+  const request = {
+
+    reference:
+      `VX-DEMO-${Math.floor(
+        100000 + Math.random()*900000
+      )}`,
+
+    dealership:
+      document.getElementById("dealerName").value.trim(),
+
+    contact:
+      document.getElementById("dealerContact").value.trim(),
+
+    email:
+      document.getElementById("dealerEmail").value.trim(),
+
+    phone:
+      document.getElementById("dealerPhone").value.trim(),
+
+    province:
+      document.getElementById("dealerProvince").value,
+
+    feed:
+      document.getElementById("dealerFeed").value,
+
+    notes:
+      document.getElementById("dealerNotes").value.trim(),
+
+    submittedAt:
+      new Date().toISOString(),
+
+    status:
+      "DEMO REQUEST — LOCAL ONLY"
+
+  };
+
+
+  localStorage.setItem(
+    "VECTORI_DEALER_REQUEST",
+    JSON.stringify(request)
+  );
+
+
+  document.getElementById("dealerStatus").innerHTML = `
+
+    <div class="status-box">
+
+      <strong style="color:var(--good)">
+        Uptake request created
+      </strong>
+
+      <br><br>
+
+      Reference:
+      <strong style="color:white">
+        ${escapeHtml(request.reference)}
+      </strong>
+
+      <br><br>
+
+      This prototype stores the request locally in this
+      browser. It has not been transmitted to VECTORI or
+      a dealership management system.
+
+    </div>
+
+  `;
+
+}
+
+
+function downloadDealerBrief(){
+
+  const text = `
+
+VECTORI — DEALER PILOT BRIEF
+
+Vehicle Purchase Intelligence
+
+PURPOSE
+
+VECTORI is a vehicle search, comparison and purchase-intelligence
+platform designed to help consumers find the better vehicle,
+not simply the cheaper vehicle.
+
+DEALER INVENTORY
+
+VECTORI is designed to receive inventory through authorised sources.
+
+Preferred routes:
+
+1. Dealer API / authorised integration
+2. Dealer CSV / JSON export
+3. Dealer management-system integration
+4. Another mutually approved feed
+
+DATA FIELDS
+
+Typical fields may include:
+
+- Stock/listing ID
+- Make
+- Model
+- Variant
+- Year
+- Mileage
+- Asking price
+- Fuel
+- Transmission
+- Location
+- Availability/status
+- Source URL
+- Images where rights permit
+
+DATA RIGHTS
+
+The dealer should confirm the rights required for VECTORI to:
+
+- access the feed
+- store eligible data
+- display inventory
+- transform/normalise information
+- compare vehicles
+- generate analytics
+- display approved images
+
+DATA MINIMISATION
+
+VECTORI should avoid unnecessary personal information.
+
+PILOT
+
+A pilot can be structured around:
+
+- limited duration
+- non-exclusive participation
+- correction/removal mechanisms
+- inventory pause capability
+- authorisation expiry
+- feed validation
+
+IMPORTANT
+
+VECTORI does not require unauthorised marketplace scraping
+for the production architecture.
+
+`;
+
+  const blob =
+    new Blob(
+      [text],
+      {type:"text/plain"}
+    );
+
+
+  const url =
+    URL.createObjectURL(blob);
+
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+
+  a.download =
+    "VECTORI_Dealer_Brief.txt";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(url);
+
+}
+
+
+/* ============================================================
+   MODALS
+============================================================ */
+
+function openModal(id){
+
+  const modal =
+    document.getElementById(id);
+
+  if(modal){
+    modal.classList.add("open");
+  }
+
+}
+
+
+function closeModal(id){
+
+  const modal =
+    document.getElementById(id);
+
+  if(modal){
+    modal.classList.remove("open");
+  }
+
+}
+
+
+document.querySelectorAll(".modal")
+  .forEach(modal => {
+
+    modal.addEventListener(
+      "click",
+      event => {
+
+        if(event.target === modal){
+
+          modal.classList.remove("open");
+
+        }
+
+      }
+    );
+
+  });
+
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(event.key === "Escape"){
+
+      document
+        .querySelectorAll(".modal.open")
+        .forEach(modal =>
+          modal.classList.remove("open")
+        );
+
+    }
+
+  }
+);
+
+
+/* ============================================================
+   ADVERTISING MANAGER SYSTEM
+============================================================ */
+
+const AdManager={
+  campaigns:[
+    {id:'CMP-001',company:'AutoFinance Corp',campaign:'Vehicle Finance',formats:['Medium Rectangle','Large Rectangle'],destinationUrl:'#promo-finance',active:true,priority:10,content:'<div class="ad-creative"><b>Finance smarter.</b><span>Compare vehicle costs before you commit.</span><button class="btn btn-primary ad-cta">Explore finance</button></div>'},
+    {id:'CMP-002',company:'SecureDrive Insurance',campaign:'Cover',formats:['Half Page'],destinationUrl:'#promo-insurance',active:true,priority:9,content:'<div class="ad-creative ad-tall"><b>Protect the purchase.</b><span>Insurance is part of the real ownership cost.</span><button class="btn btn-secondary ad-cta">Get a quote</button></div>'},
+    {id:'CMP-003',company:'AutoTrade Parts',campaign:'Accessories',formats:['Leaderboard','Wide Banner'],destinationUrl:'#promo-parts',active:true,priority:8,content:'<div class="ad-wide"><b>Upgrade your next drive.</b><span>Accessories, tyres and vehicle essentials.</span><button class="btn btn-secondary ad-cta">Shop now</button></div>'},
+    {id:'CMP-004',company:'Dealer Partner Network',campaign:'Dealer Growth',formats:['Mobile Banner'],destinationUrl:'#dealer',active:true,priority:7,content:'<div class="ad-mobile"><b>Put your stock in front of ready buyers.</b><button class="btn btn-primary ad-cta">Join VECTORI</button></div>'},
+    {id:'CMP-005',company:'RoadSafe Inspections',campaign:'Vehicle checks',formats:['Large Rectangle','Medium Rectangle'],destinationUrl:'#checks',active:true,priority:6,content:'<div class="ad-creative"><b>Check before you buy.</b><span>Service history, inspection and ownership evidence matter.</span><button class="btn btn-secondary ad-cta">Learn more</button></div>'},
+    {id:'CMP-006',company:'Mobility Partner',campaign:'Vehicle Marketplace',formats:['Wide Banner','Leaderboard'],destinationUrl:'#mobility',active:true,priority:5,content:'<div class="ad-wide"><b>More choice. Better decisions.</b><span>Discover your next vehicle with confidence.</span><button class="btn btn-primary ad-cta">View offers</button></div>'}
+  ],
+  tracking:{impressions:{},clicks:{}},
+  dims:{'Leaderboard':{h:'90px',mw:'970px'},'Wide Banner':{h:'90px',mw:'728px'},'Medium Rectangle':{h:'250px',mw:'300px'},'Large Rectangle':{h:'280px',mw:'336px'},'Half Page':{h:'600px',mw:'300px'},'Mobile Banner':{h:'100px',mw:'320px'}},
+  init(){document.querySelectorAll('.ad-slot').forEach(slot=>this.renderAd(slot,slot.dataset.format));},
+  choose(format){return this.campaigns.filter(c=>c.active&&c.formats.includes(format)).sort((a,b)=>b.priority-a.priority)[0]||null;},
+  renderAd(slot,format){
+    const c=this.choose(format), d=this.dims[format]||this.dims['Medium Rectangle'];
+    slot.style.height=d.h; slot.style.maxWidth=d.mw; slot.classList.add('ad-container');
+    const id=c?c.id:'fallback'; const href=c?c.destinationUrl:'#';
+    slot.innerHTML=`<div class="ad-label">Advertisement</div>${c?c.content:`<div class="ad-empty">${escapeHtml(format)}<br>Space available</div>`}`;
+    if('IntersectionObserver' in window){
+      const observer=new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting && entry.intersectionRatio>=0.5){
+            this.trackImpression(id);
+            observer.disconnect();
+          }
+        });
+      },{threshold:0.5});
+      observer.observe(slot);
+    } else {
+      this.trackImpression(id);
+    }
+    slot.onclick=()=>{this.trackClick(id); if(href!=='#') window.location.hash=href.replace('#','');};
+  },
+  trackImpression(id){this.tracking.impressions[id]=(this.tracking.impressions[id]||0)+1;},
+  trackClick(id){this.tracking.clicks[id]=(this.tracking.clicks[id]||0)+1;},
+  report(){return this.campaigns.map(c=>({id:c.id,company:c.company,impressions:this.tracking.impressions[c.id]||0,clicks:this.tracking.clicks[c.id]||0,ctr:(this.tracking.clicks[c.id]||0)/Math.max(1,this.tracking.impressions[c.id]||0)*100}));}
+};
+
+
+/* ============================================================
+   INITIALISE
+============================================================ */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    populateFilters();
+
+    renderVehicles(vehicles);
+
+    renderComparison();
+
+    /*
+      Default calculator vehicle:
+      Suzuki Swift development example.
+    */
+
+    document.getElementById("calcVehicle").value =
+      "VEH-002";
+
+    loadCalculatorVehicle();
+    
+    /* 
+      Initialize Ad System 
+    */
+    AdManager.init();
+
+  }
+);
+
+
+</script>
+
+<div id="buildStamp" hidden>VECTORI Global-Standard SA Upgrade 1.0</div>
+</body>
+</html>
